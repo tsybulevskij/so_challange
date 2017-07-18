@@ -11,7 +11,7 @@ def index():
     if request.method == 'POST':
         if request.form['user_id']:
             so_client = StackOverflowClient()
-            posts, user_details = so_client.get_so_posts_by_user_id(request.form['user_id'])
+            posts = so_client.get_so_posts_by_user_id(request.form['user_id'])
     return render_template('index.html', posts=posts)
 
 
@@ -25,7 +25,12 @@ def own_posts():
         posts = []
         user_details = None
         if access_token:
-            posts, user_details = so_client.get_own_posts(access_token)
+            user_details = so_client.get_user_details(access_token)
+            print(user_details)
+            if user_details:
+                posts = so_client.get_so_posts_by_user_id(user_details["user_id"])
+            else:
+                posts = so_client.get_own_posts(access_token)
         return render_template('own_posts.html', posts=posts, user_details=user_details)
 
 

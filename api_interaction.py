@@ -30,10 +30,9 @@ class StackOverflowClient(object):
         )
         return self.get_so_posts(url=url)
 
-    def get_so_posts(self, url, need_user_info=False):
+    def get_so_posts(self, url):
         all_posts = []
         page_counter = 1
-        user_info = None
         while True:
             try:
                 page_url = "{url}&page={page}".format(url=url, page=page_counter)
@@ -45,10 +44,6 @@ class StackOverflowClient(object):
                     try:
                         new_posts, has_more = self.parse_posts(r.text)
                         all_posts.extend(new_posts)
-
-                        if need_user_info and page_counter == 1:
-                            user_info = self.get_user_details(r.text)
-
                         page_counter += 1
 
                         if not has_more:
@@ -58,7 +53,7 @@ class StackOverflowClient(object):
 
                 else:
                     break
-        return all_posts, user_info
+        return all_posts
 
     def parse_posts(self, data):
         posts = []
@@ -106,13 +101,28 @@ class StackOverflowClient(object):
               "sort=activity&access_token={token}".format(
             api_url=self.API_URL, version=self.VERSION, key=self.KEY, token=token
         )
-        return self.get_so_posts(url=url, need_user_info=True)
+        return self.get_so_posts(url=url)
 
-    def get_user_details(self, data):
+    def get_user_details(self, token):
+        url = "{api_url}{version}/me?key={key}&site=stackoverflow&order=desc&" \
+              "sort=reputation&access_token={token}".format(
+            api_url=self.API_URL, version=self.VERSION, key=self.KEY, token=token
+        )
+
+        try:
+            r = requests.get(url)
+        except Exception as e:
+            raise RequestError(e)
+        else:
+            if r.status_code == 200:
+                return self.parse_user_details(r.text)
+            else:
+                return None
+
+    def parse_user_details(self, data):
         try:
             parsed_data = json.loads(data)
             for item in parsed_data["items"]:
-                return item["owner"]
+                return item
         except Exception as e:
             return None
-        return None
