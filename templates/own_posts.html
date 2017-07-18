@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Own posts</title>
+</head>
+<body>
+<a href="/">Back</a>
+{% if user_details %}
+<div class="user_details">
+    <p><a href="{{ user_details['link'] }}" target="_blank"><img src="{{ user_details['profile_image'] }}"/></a></p>
+    <p>Name: {{ user_details['display_name'] }}</p>
+    <p>User ID: {{ user_details['user_id'] }}</p>
+    <p>Reputation: {{ user_details['reputation'] }}</p>
+</div>
+{% endif %}
+
+{% include 'posts.html' %}
+</body>
+</html>

@@ -6,12 +6,16 @@
 </head>
 <body>
     <form method="post">
-        <input type="text" name="user_id" value="281848">
-        <input type="submit" value="Get my posts">
+        User id: <input type="text" name="user_id" value="" placeholder="281848">
+        <input type="submit" value="Get posts">
+    </form>
+    <br/>
+    <br/>
+    <form method="post" action="/own_posts">
+        <input type="submit" value="Get MY posts">
     </form>
 
-    {% for post in posts %}
-    <div class=flash><a href="{{ post }}">{{ post }}</a></div>
-    {% endfor %}
+    {% include 'posts.html' %}
+
 </body>
 </html>

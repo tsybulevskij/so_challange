@@ -1,0 +1,8 @@
+{% if posts %}
+    <p><b>Posts:</b></p>
+    {% for post in posts %}
+    <div class="so_post"><a href="{{ post }}">{{ post }}</a></div>
+    {% endfor %}
+{% else %}
+    <div>There is no posts.</div>
+{% endif %}
