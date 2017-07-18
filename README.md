@@ -7,7 +7,9 @@ It's a web application that gets posts from Stack Overflow by user id or via OAu
 ~ How do I use it?
 
 1. create and activate environment from the root of the project directory
+
  `virtualenv -p python3.5 venv`
+
  `. venv/bin/activate`
 
 2. install dependecies root of the project directory
